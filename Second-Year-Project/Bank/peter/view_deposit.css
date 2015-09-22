@@ -1,0 +1,8 @@
+/* Style the view_deposit_ac.html.php*/
+
+/*style the table in transaction history*/
+
+.rows{
+	width: 500px;
+	padding-right: 200px;
+}

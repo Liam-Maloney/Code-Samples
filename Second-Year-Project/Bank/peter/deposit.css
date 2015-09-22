@@ -1,0 +1,49 @@
+/*
+Group:					BANK
+Student Number:			C00186095
+Student Name:			CIARA MCMAHON						
+Description:			Styling adjustments made to any of the following screens 
+						Calculate Interest on Deposit Account
+						Open a Deposit Account
+						Close a Deposit Account
+						View a Deposit Account
+						Deposit Account History
+
+*/
+
+
+/* Style for table in deposit_ac_history.html.php */
+.headings th{
+    width: 2%;
+    position: ;
+    background: linear-gradient(to top, rgba(152, 190, 222, 0.39) 60%, rgba(100, 149, 237, 0.25)); 
+}
+
+#depositHistoryTable {
+    display: block;
+    height: 330px;
+    position: relative;
+    bottom: 90px;
+    left: -5px;
+    width: 875px;
+    overflow: scroll;
+    background: linear-gradient(white, rgba(82, 144, 172, 0.32)); 
+}
+
+#depositHistoryTable td{
+    width: 202px;
+}
+
+#depositHistoryTable td:last-child{
+    position: relative;
+    left: 25px;
+}
+
+.headings {
+   position: absolute;
+    bottom: 349px;
+    width: 880px;
+    left: 28px;
+    z-index: 1;
+    background: white;
+}

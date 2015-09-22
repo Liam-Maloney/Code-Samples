@@ -1,0 +1,165 @@
+/*
+    AUTHOR: Liam Maloney
+    PURPOSE:    This file contains many minor adjustments which have been
+                used on my (Liam Maloney) individual work units.
+    DATE: 23 March 2015
+*/
+
+#loanAmount, #loanTerm {
+	position: relative;
+	bottom: 12px;
+	margin-top: -5px;
+}
+
+.inputRepos {
+	position: relative;
+    top: -7px;
+    left: 4px;
+}
+
+#loanTerm {
+	margin-bottom: -5px;
+}
+
+.detailLabels { 
+    /*needed because labels with empty divs 
+    beside them were not aligning correctly*/
+    clear: left;
+    text-align: right;
+}
+
+.fullwidth {
+    /*stops elements from wrapping to the next
+    line*/
+    white-space: nowrap; 
+    position: relative;
+}
+
+#content {
+    position: relative;
+    height: 200px;
+    
+}
+
+.halfwidth {
+	height: 200px;
+	overflow: hidden;
+	margin: 10px 8px 10px 5px;
+	padding: 5px;
+	padding-bottom: 20px;
+	width: 450px;
+	min-height: 80px;
+	float: left;
+	display: inline;
+}
+
+label {
+	margin: 5px 10px 5px 10px;
+	padding: 10px;
+	padding-top: 15px;
+	width: 170px;
+	height: 30px;
+	display: inline-block;
+	font-size: 16px;
+    left: 5px;
+}
+
+input[type="submit"], input[type="button"], input[type="reset"] {
+	padding: 5px;
+	margin: 25px 20px 0px 20px;
+	border: solid 1px DarkSlateBlue ;
+	border: solid 1px CornflowerBlue ;
+	background: linear-gradient(to bottom, #98bede 0%,
+        #deefff 34%,#deefff 62%,#98bede 100%); 
+	background: linear-gradient(to bottom, #e1ffff 0%,
+        #e1ffff 7%,#e1ffff 12%,#e6f8fd 30%,#c8eefb 54%,
+        #bee4f8 75%,#b1d8f5 100%);
+	width: 120px;
+	border-radius: 14px;
+	outline: none; 
+ }   
+ 
+#confirm {
+	left: 653px;
+	width: 205px;
+}
+ 
+.amendViewDetailLabels {
+    text-align: left;
+    width: 128px;
+    position: relative;
+    bottom: 10px;
+}
+
+.amendViewDetailInputs {
+    position: relative;
+    top: 15px;
+    right: 150px
+}
+
+#custNameReposition {
+    position: relative;
+    right: 50px;
+}
+
+#custNumberReposition {
+    position: relative;
+    margin-right: 60px;
+}
+
+#selectAccountByCenter {
+    position:relative;
+    left: 50px;
+}
+
+#loanHistory, #currentHistory{
+    height: 400px;
+}
+
+.headings th{
+    /*Formats the heading row in the 
+    history pages*/
+    width: 2%;
+    background: linear-gradient(to top, 
+        rgba(152, 190, 222, 0.39) 60%, 
+        rgba(100, 149, 237, 0.25)); 
+}
+
+#loanHistoryTable {
+    display: block;
+    height: 330px;
+    position: relative;
+    bottom: 90px;
+    left: -5px;
+    width: 875px;
+    overflow: scroll;
+    background: linear-gradient(white, rgba(82, 144, 172, 0.32)); 
+}
+
+#loanHistoryTable td{
+    width: 202px;
+}
+
+#loanHistoryTable td:last-child{
+    /*Performs a slight repositioning
+    of the last collumn in the history
+    tables, as this collumn was not alligning
+    correctly*/
+    position: relative;
+    left: 25px;
+}
+
+.headings {
+    /*Brings the table headings forward*/
+    position: absolute;
+    bottom: 349px;
+    width: 880px;
+    left: 28px;
+    z-index: 1;
+    background: white;
+}
+
+.paymentAdjust {
+    position: relative;
+    bottom: 10px;
+}
