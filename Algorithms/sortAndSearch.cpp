@@ -78,6 +78,36 @@ unsigned long determinSize(std::string sourceName)
 	return count;
 }
 
+unsigned long binarySearch(unsigned long lookFor, unsigned long sortedArr[], unsigned long size)
+{
+	unsigned long start, end, current;
+	start = 0;
+	end = size - 1;
+	current = 0;
+
+	while (start + 1 != end && end - 1 != start)
+	{
+		current = (end + start) / 2;
+		if (sortedArr[current] != lookFor)
+		{
+			if (lookFor < sortedArr[current])
+			{
+				end = current;
+			}
+			else
+			{
+				start = current;
+			}
+		}
+		else 
+		{
+			return current;
+		}
+	}
+	//flag for not found is -1;
+	return -1;
+}
+
 int main(int argc, char *argv[])
 {
 	const int SOURCE_FILE = 1;
@@ -90,5 +120,6 @@ int main(int argc, char *argv[])
 	std::cout << "Begin Sorting..." << std::endl;
 	partitionStep(numArr, 0, size - 1);
 	std::cout << "Sorted" << std::endl;
+	std::cout << "Found at index: " << binarySearch(553291144, numArr, size) << std::endl;
 	delete [] numArr;
 }
