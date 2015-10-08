@@ -23,6 +23,21 @@ class Graph
 	};
 
 	//---------------- END GRAPH STRUCTURES------------------------
+
+	//--------------------OPERATIONS-------------------------------
+
+public:
+
+	bool isEmpty();
+	void addNode();
+	void addEdge();
+	void removeEdge();
+	void removeNode();
+	bool areAdjacentNodes();
+	void depthFirstSearch();
+	void breadthFirstSearch();
+
+	//------------------END OPERATIONS-----------------------------
 };
 
 int main() {
