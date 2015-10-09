@@ -2,7 +2,7 @@
 #include <list>
 #include <string>
 
-class Graph
+template <typename T> class Graph
 {
 	//------------------- GRAPH STRUCTURES------------------------
 
@@ -17,10 +17,14 @@ class Graph
 	//Represents a Node in the Graph
 	struct Node
 	{
+		T data;
 		Node* next;				//Next node in graph
 		std::list<Arc> arcs;	//A list of arcs from this node
 		std::string id;			//An identifier for this node
 	};
+
+	//Will act as a list of pointers to the graph nodes.
+	std::list<Node*> graphNodesList;
 
 	//---------------- END GRAPH STRUCTURES------------------------
 
@@ -29,17 +33,35 @@ class Graph
 public:
 
 	bool isEmpty();
-	void addNode();
+
+	void addNode(T newNodeData)
+	{
+		Node* newNode = new Node;
+		newNode->data = newNodeData;
+		graphNodesList.push_front(newNode);
+	}
+
 	void addEdge();
+
 	void removeEdge();
+
 	void removeNode();
+
 	bool areAdjacentNodes();
+
 	void depthFirstSearch();
+
 	void breadthFirstSearch();
 
 	//------------------END OPERATIONS-----------------------------
 };
 
 int main() {
+
+	Graph <int> testGraph;
+	for (int i = 0; i < 100; i++)
+	{
+		testGraph.addNode(i);
+	}
 	return 0;
 }
