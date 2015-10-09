@@ -34,6 +34,7 @@ public:
 
 	bool isEmpty();
 
+	//Adds a new vertex to the graph
 	void addNode(T newNodeData)
 	{
 		Node* newNode = new Node;
@@ -55,13 +56,3 @@ public:
 
 	//------------------END OPERATIONS-----------------------------
 };
-
-int main() {
-
-	Graph <int> testGraph;
-	for (int i = 0; i < 100; i++)
-	{
-		testGraph.addNode(i);
-	}
-	return 0;
-}
