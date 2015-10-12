@@ -3,11 +3,12 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <string>
 
-class WordStack{
+template <typename T> class Stack{
 
 	struct stackItem{
-		char letter = NULL;
+		T item = NULL;
 		stackItem* previous = NULL;
 	};
 
@@ -20,7 +21,7 @@ public:
 
 	char pop(){
 		if (!isEmpty()){
-			char popped = top->letter;
+			T popped = top->item;
 			//shadow pointer to keep track of old top to enable deletion
 			stackItem* oldTop = top;
 			//assign top to previous item
@@ -33,7 +34,7 @@ public:
 
 	void push(char newLetter){
 		stackItem* newItem = new stackItem;
-		(*newItem).letter = newLetter;
+		(*newItem).item = newLetter;
 		//set what is below the current top to be below
 		//the new item.
 		if (isEmpty()){
