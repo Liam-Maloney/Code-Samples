@@ -4,10 +4,10 @@
 #include "stdafx.h"
 #include <iostream>
 
-class NumberQueue {
+template <typename T> class Queue {
 	
 	struct queueItem {
-		int number = NULL;
+		T item = NULL;
 		queueItem* next = NULL;
 	};
 
@@ -16,9 +16,9 @@ class NumberQueue {
 
 public:
 
-	void enqueue(int newNumber) {
+	void enqueue(T newItem) {
 		queueItem* newItem = new queueItem;
-		newItem->number = newNumber;
+		newItem->item = newNumber;
 		if (isEmpty()) {
 			head = newItem;
 			tail = newItem;
@@ -30,11 +30,11 @@ public:
 
 	int dequeue() {
 		if (!isEmpty()) {
-			int dequeuedNumber = head->number;
+			T dequeuedItem = head->item;
 			queueItem* shadow = head;
 			head = head->next;
 			delete shadow;
-			return dequeuedNumber;
+			return dequeuedItem;
 		}
 	}
 
