@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include <list>
 #include <string>
+#include <iostream>
+#include <algorithm>
 
 template <typename T> class Graph
 {
@@ -9,8 +11,8 @@ template <typename T> class Graph
 	//Represents Arcs between vertexes
 	struct Arc
 	{
-		std::string goesTo;		//Identifier for element Arc goes to
-		int weight;				//weight of connection
+		T goesTo;				//Identifier for element Arc goes to
+		int weight;				//weight of connection (Not used for now)
 		Arc* next;				//Pointer to next Arc from parents node
 	};
 
@@ -18,13 +20,14 @@ template <typename T> class Graph
 	struct Node
 	{
 		T data;
-		Node* next;				//Next node in graph
 		std::list<Arc> arcs;	//A list of arcs from this node
-		std::string id;			//An identifier for this node
+		int id;					//An identifier for this node (Not used for now, may be used
+								//in future to differenciate duplicate nodes)
 	};
 
 	//Will act as a list of pointers to the graph nodes.
-	std::list<Node*> graphNodesList;
+	std::list<Node> graphNodesList;
+	int IDGen = 0;	//will be incremented every time a new node is added
 
 	//---------------- END GRAPH STRUCTURES------------------------
 
@@ -32,17 +35,34 @@ template <typename T> class Graph
 
 public:
 
-	bool isEmpty();
+	bool isEmpty()
+	{
+		return graphNodesList.empty();
+	};
 
 	//Adds a new vertex to the graph
 	void addNode(T newNodeData)
 	{
-		Node* newNode = new Node;
-		newNode->data = newNodeData;
-		graphNodesList.push_front(newNode);
+		Node newNode;
+		newNode.data = newNodeData;
+		newNode.id = IDGen++;
+		graphNodesList.push_back(newNode);
 	}
 
-	void addEdge();
+	void addEdge(T nodeToAddEdge, T linkTo)
+	{
+		//used to get a pointer to the element we want to add the edge to
+		std::list<Node>::iterator find = graphNodesList.begin();
+		//find the vertex to insert the edge to 
+		while ((find->data != nodeToAddEdge) & find != graphNodesList.end())
+		{
+			find++;
+		}
+		//now establish the link and add it to the arcs list
+		Arc newEdge;
+		newEdge.goesTo = linkTo;
+		find->arcs.push_back(newEdge);
+	}
 
 	void removeEdge();
 
