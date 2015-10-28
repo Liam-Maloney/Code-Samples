@@ -51,7 +51,8 @@ public:
 
 	void addEdge(T nodeToAddEdge, T linkTo)
 	{
-		//used to get a pointer to the element we want to add the edge to
+		//search for the element to add the edge to
+		//stores reference to the item we want to find
 		std::list<Node>::iterator find = graphNodesList.begin();
 		//find the vertex to insert the edge to 
 		while ((find->data != nodeToAddEdge) & find != graphNodesList.end())
@@ -64,7 +65,23 @@ public:
 		find->arcs.push_back(newEdge);
 	}
 
-	void removeEdge();
+	void removeEdge(T nodeToRmoveEdgeFrom, T edgeToRemove)
+	{
+		std::list<Node>::iterator findsNode = graphNodesList.begin();
+		//find the vertex to remove the edge from 
+		while ((findsNode->data != nodeToRmoveEdgeFrom) & findsNode != graphNodesList.end())
+		{
+			findsNode++;
+		}
+
+		//now get a reference to the arc to remove
+		std::list<Arc>::iterator findsArc = findsNode->arcs.begin();
+		while (findsArc->goesTo != edgeToRemove)
+		{
+			findsArc++;
+		}
+		findsNode->arcs.erase(findsArc);
+	}
 
 	void removeNode();
 
@@ -76,3 +93,19 @@ public:
 
 	//------------------END OPERATIONS-----------------------------
 };
+
+int main()
+{
+	Graph<std::string> SG;
+
+	SG.addNode("Tom");
+	SG.addNode("Liam");
+	SG.addNode("Gary");
+	SG.addNode("Ciara");
+	SG.addNode("Mary");
+	SG.addEdge("Liam", "Tom");
+	SG.addEdge("Liam", "Mary");
+	SG.addEdge("Liam", "Gary");
+	SG.removeEdge("Liam", "Mary");
+	system("pause");
+}
