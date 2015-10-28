@@ -65,11 +65,11 @@ public:
 		find->arcs.push_back(newEdge);
 	}
 
-	void removeEdge(T nodeToRmoveEdgeFrom, T edgeToRemove)
+	void removeEdge(T nodeToRemoveEdgeFrom, T edgeToRemove)
 	{
 		std::list<Node>::iterator findsNode = graphNodesList.begin();
 		//find the vertex to remove the edge from 
-		while ((findsNode->data != nodeToRmoveEdgeFrom) & findsNode != graphNodesList.end())
+		while ((findsNode->data != nodeToRemoveEdgeFrom) & findsNode != graphNodesList.end())
 		{
 			findsNode++;
 		}
@@ -83,7 +83,16 @@ public:
 		findsNode->arcs.erase(findsArc);
 	}
 
-	void removeNode();
+	void removeNode(T nodeToRemove)
+	{
+		std::list<Node>::iterator findsNodeToDelete = graphNodesList.begin();
+		//find the vertex to remove the edge from 
+		while ((findsNodeToDelete->data != nodeToRemove) & findsNodeToDelete != graphNodesList.end())
+		{
+			findsNodeToDelete++;
+		}
+		graphNodesList.erase(findsNodeToDelete);
+	}
 
 	bool areAdjacentNodes();
 
@@ -107,5 +116,6 @@ int main()
 	SG.addEdge("Liam", "Mary");
 	SG.addEdge("Liam", "Gary");
 	SG.removeEdge("Liam", "Mary");
+	SG.removeNode("Gary");
 	system("pause");
 }
