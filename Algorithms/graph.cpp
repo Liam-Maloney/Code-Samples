@@ -94,7 +94,31 @@ public:
 		graphNodesList.erase(findsNodeToDelete);
 	}
 
-	bool areAdjacentNodes();
+	bool isConnectedTo(T connectionFrom, T connectionTo)
+	{
+		std::list<Node>::iterator connectionFromNode = graphNodesList.begin();
+		while ((connectionFromNode->data != connectionFrom) & connectionFromNode != graphNodesList.end())
+		{
+			connectionFromNode++;
+		}
+
+		bool isConnected = false;
+		std::list<Arc>::iterator findsArc = connectionFromNode->arcs.begin();
+		std::list<Arc>::iterator arcsEnd = connectionFromNode->arcs.end();
+		arcsEnd--;
+
+		while ((findsArc->goesTo != connectionTo) && (findsArc != arcsEnd))
+		{
+			findsArc++;
+		}
+
+		if (findsArc->goesTo == connectionTo)
+		{
+			isConnected = true;
+		}
+
+		return isConnected;
+	}
 
 	void depthFirstSearch();
 
@@ -117,5 +141,31 @@ int main()
 	SG.addEdge("Liam", "Gary");
 	SG.removeEdge("Liam", "Mary");
 	SG.removeNode("Gary");
+
+	std::string from;
+	std::string to;
+
+	from = "Liam";
+	to = "Tom";
+	if (SG.isConnectedTo(from, to))
+	{
+		std::cout << from << " and " << to << " are connected" << std::endl;
+	}
+	else
+	{
+		std::cout << from << " and " << to << " are NOT connected" << std::endl;
+	}
+
+	from = "Liam";
+	to = "Mary";
+	if (SG.isConnectedTo(from, to))
+	{
+		std::cout << from << " and " << to << " are connected" << std::endl;
+	}
+	else
+	{
+		std::cout << from << " and " << to << " are NOT connected" << std::endl;
+	}
+
 	system("pause");
 }
