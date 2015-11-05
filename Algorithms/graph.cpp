@@ -11,7 +11,7 @@ template <typename T> class Graph
 	//Represents Arcs between vertexes
 	struct Arc
 	{
-		T goesTo;
+		T nodeArcPointsTo;
 	};
 
 	//Represents a Node in the Graph
@@ -59,7 +59,7 @@ public:
 		}
 		//now establish the link and add it to the arcs list
 		Arc newEdge;
-		newEdge.goesTo = linkTo;
+		newEdge.nodeArcPointsTo = linkTo;
 		find->arcs.push_back(newEdge);
 	}
 
@@ -74,7 +74,7 @@ public:
 
 		//now get a reference to the arc to remove
 		std::list<Arc>::iterator findsArc = findsNode->arcs.begin();
-		while (findsArc->goesTo != edgeToRemove)
+		while (findsArc->nodeArcPointsTo != edgeToRemove)
 		{
 			findsArc++;
 		}
@@ -105,12 +105,12 @@ public:
 		std::list<Arc>::iterator arcsEnd = connectionFromNode->arcs.end();
 		arcsEnd--;
 
-		while ((findsArc->goesTo != connectionTo) && (findsArc != arcsEnd))
+		while ((findsArc->nodeArcPointsTo != connectionTo) && (findsArc != arcsEnd))
 		{
 			findsArc++;
 		}
 
-		if (findsArc->goesTo == connectionTo)
+		if (findsArc->nodeArcPointsTo == connectionTo)
 		{
 			isConnected = true;
 		}
