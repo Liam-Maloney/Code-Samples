@@ -28,6 +28,16 @@ template <typename T> class Graph
 
 	//--------------------OPERATIONS-------------------------------
 
+	Node* findNode(T findNodeWithThisData)
+	{
+		std::list<Node>::iterator findsNode = graphNodesList.begin();
+		while ((findsNode->dataContainedAtNode != findNodeWithThisData) & findsNode != graphNodesList.end())
+		{
+			findsNode++;
+		}
+		return &(*findsNode);
+	}
+
 public:
 
 	bool isEmpty()
@@ -42,25 +52,13 @@ public:
 		graphNodesList.push_back(newNode);
 	}
 
-	void addEdge(T nodeToAddEdge, T newEdgeLinkTo)
+	void addEdge(T nodeToAddArc, T newArcLinkTo)
 	{
-		std::list<Node>::iterator sourceOfEdge = graphNodesList.begin();
-		while ((sourceOfEdge->dataContainedAtNode != nodeToAddEdge) & sourceOfEdge != graphNodesList.end())
-		{
-			sourceOfEdge++;
-		}
-
-		std::list<Node>::iterator destinationOfEdge = graphNodesList.begin();
-		while ((destinationOfEdge->dataContainedAtNode != newEdgeLinkTo) & destinationOfEdge != graphNodesList.end())
-		{
-			destinationOfEdge++;
-		}
-
-		Arc newEdge;
-		//1. Dereference iterator to get the node we want to point the edge to
-		//2. Now return the address of that node and assign it to nodeArcPointsTo
-		newEdge.nodeArcPointsTo = &(*destinationOfEdge);
-		sourceOfEdge->arcs.push_back(newEdge);
+		Node* sourceOfArc = findNode(nodeToAddArc);
+		Node* destinationOfArc = findNode(newArcLinkTo);
+		Arc newArc;
+		newArc.nodeArcPointsTo = destinationOfArc;
+		sourceOfArc->arcs.push_back(newArc);
 	}
 
 	void removeEdge(T nodeToRemoveEdgeFrom, T edgeToRemove)
