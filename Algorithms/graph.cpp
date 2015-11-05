@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-template <typename T> class Graph
+template <typename T> class DiGraph
 {
 	//------------------- GRAPH STRUCTURES------------------------
 
@@ -18,7 +18,8 @@ template <typename T> class Graph
 	struct Node
 	{
 		T dataContainedAtNode;
-		std::list<Arc> arcs;	
+		std::list<Arc*> arcs;	//needs to be a list of pointers, 
+								//as I will be using the address to delete particular Arcs
 	};
 
 	//Will act as a list of pointers to the graph nodes.
@@ -38,6 +39,16 @@ template <typename T> class Graph
 		return &(*findsNode);
 	}
 
+	Arc* findArc(Node* findArcFromHere, Node* findArcToHere)
+	{
+		std::list<Arc*>::iterator findsArc = findArcFromHere->arcs.begin();
+		while ((*findsArc)->nodeArcPointsTo != findArcToHere)
+		{
+			findsArc++;
+		}
+		return *findsArc;
+	}
+
 public:
 
 	bool isEmpty()
@@ -52,31 +63,22 @@ public:
 		graphNodesList.push_back(newNode);
 	}
 
-	void addEdge(T nodeToAddArc, T newArcLinkTo)
+	void addArc(T nodeToAddArc, T newArcLinkTo)
 	{
 		Node* sourceOfArc = findNode(nodeToAddArc);
 		Node* destinationOfArc = findNode(newArcLinkTo);
-		Arc newArc;
-		newArc.nodeArcPointsTo = destinationOfArc;
+		Arc* newArc = new Arc;
+		newArc->nodeArcPointsTo = destinationOfArc;
 		sourceOfArc->arcs.push_back(newArc);
 	}
 
-	void removeEdge(T nodeToRemoveEdgeFrom, T edgeToRemove)
+	void removeArc(T dataOfNodeToRemoveArcFrom, T dataOfNodeWhichArcGoesTo)
 	{
-		std::list<Node>::iterator findsNode = graphNodesList.begin();
-		//find the vertex to remove the edge from 
-		while ((findsNode->dataContainedAtNode != nodeToRemoveEdgeFrom) & findsNode != graphNodesList.end())
-		{
-			findsNode++;
-		}
-
-		//now get a reference to the arc to remove
-		std::list<Arc>::iterator findsArc = findsNode->arcs.begin();
-		while (findsArc->nodeArcPointsTo != edgeToRemove)
-		{
-			findsArc++;
-		}
-		findsNode->arcs.erase(findsArc);
+		Node* nodeToRemoveArcFrom = findNode(dataOfNodeToRemoveArcFrom);
+		Node* removeArcTo = findNode(dataOfNodeWhichArcGoesTo);
+		Arc* arcToRemove = findArc(nodeToRemoveArcFrom, removeArcTo);
+		nodeToRemoveArcFrom->arcs.remove(arcToRemove);
+		delete arcToRemove;
 	}
 
 	void removeNode(T nodeToRemove)
@@ -125,17 +127,19 @@ public:
 
 int main()
 {
-	Graph<std::string> SG;
+	DiGraph<std::string> SG;
 
 	SG.addNode("Tom");
 	SG.addNode("Liam");
 	SG.addNode("Mary");
 	SG.addNode("James");
 
-	SG.addEdge("Tom", "Liam");
-	SG.addEdge("Tom", "Mary");
-	SG.addEdge("Mary", "Tom");
-	SG.addEdge("James", "Liam");
+	SG.addArc("Tom", "Liam");
+	SG.addArc("Tom", "Mary");
+	SG.addArc("Mary", "Tom");
+	SG.addArc("James", "Liam");
+
+	SG.removeArc("Tom", "Liam");
 
 	system("pause");
 }
