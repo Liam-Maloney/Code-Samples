@@ -22,7 +22,6 @@ template <typename T> class DiGraph
 								//as I will be using the address to delete particular Arcs
 	};
 
-	//Will act as a list of pointers to the graph nodes.
 	std::list<Node*> graphNodesList;
 
 	//---------------- END GRAPH STRUCTURES------------------------
@@ -88,29 +87,24 @@ public:
 		delete nodeToRemove;
 	}
 
-	bool isConnectedTo(T connectionFrom, T connectionTo)
+	bool isEdgeBetween(T connectionFrom, T connectionTo)
 	{
-		std::list<Node>::iterator connectionFromNode = graphNodesList.begin();
-		while ((connectionFromNode->dataContainedAtNode != connectionFrom) & connectionFromNode != graphNodesList.end())
-		{
-			connectionFromNode++;
-		}
-
 		bool isConnected = false;
-		std::list<Arc>::iterator findsArc = connectionFromNode->arcs.begin();
-		std::list<Arc>::iterator arcsEnd = connectionFromNode->arcs.end();
-		arcsEnd--;
-
-		while ((findsArc->nodeArcPointsTo != connectionTo) && (findsArc != arcsEnd))
+		Node* connectionFromNode = findNode(connectionFrom);
+		Node* lookingForAConnectionToThis = findNode(connectionTo);
+		std::list<Arc*>::iterator findsArc = connectionFromNode->arcs.begin();
+		std::list<Arc*>::iterator delimitsEndOfSearch = connectionFromNode->arcs.end();
+		delimitsEndOfSearch--;
+		//Scans through the list of Arcs at the Source Node, and stops when it reaches the end or the mem address of 
+		//the node we are testing to see if there is a connection to.
+		while (((*findsArc)->nodeArcPointsTo != lookingForAConnectionToThis) && findsArc != delimitsEndOfSearch)
 		{
 			findsArc++;
 		}
-
-		if (findsArc->nodeArcPointsTo == connectionTo)
+		if ((*findsArc)->nodeArcPointsTo == lookingForAConnectionToThis)
 		{
 			isConnected = true;
 		}
-
 		return isConnected;
 	}
 
@@ -134,9 +128,13 @@ int main()
 	SG.addArc("Tom", "Liam");
 	SG.addArc("Tom", "Mary");
 	SG.addArc("Mary", "Tom");
+	SG.addArc("James", "Mary");
 	SG.addArc("James", "Liam");
+	SG.addArc("James", "Tom");
 
-	SG.removeArc("Tom", "Liam");
+	std::cout << SG.isEdgeBetween("James", "Liam") << std::endl;
+	std::cout << SG.isEdgeBetween("James", "testRemoval") << std::endl;
+
 	SG.removeNode("testRemoval");
 
 	system("pause");
