@@ -42,20 +42,25 @@ public:
 		graphNodesList.push_back(newNode);
 	}
 
-	void addEdge(T nodeToAddEdge, T linkTo)
+	void addEdge(T nodeToAddEdge, T newEdgeLinkTo)
 	{
-		//search for the element to add the edge to
-		//stores reference to the item we want to find
-		std::list<Node>::iterator find = graphNodesList.begin();
-		//find the vertex to insert the edge to 
-		while ((find->dataContainedAtNode != nodeToAddEdge) & find != graphNodesList.end())
+		std::list<Node>::iterator sourceOfEdge = graphNodesList.begin();
+		while ((sourceOfEdge->dataContainedAtNode != nodeToAddEdge) & sourceOfEdge != graphNodesList.end())
 		{
-			find++;
+			sourceOfEdge++;
 		}
-		//now establish the link and add it to the arcs list
+
+		std::list<Node>::iterator destinationOfEdge = graphNodesList.begin();
+		while ((destinationOfEdge->dataContainedAtNode != newEdgeLinkTo) & destinationOfEdge != graphNodesList.end())
+		{
+			destinationOfEdge++;
+		}
+
 		Arc newEdge;
-		newEdge.nodeArcPointsTo = linkTo;
-		find->arcs.push_back(newEdge);
+		//1. Dereference iterator to get the node we want to point the edge to
+		//2. Now return the address of that node and assign it to nodeArcPointsTo
+		newEdge.nodeArcPointsTo = &(*destinationOfEdge);
+		sourceOfEdge->arcs.push_back(newEdge);
 	}
 
 	void removeEdge(T nodeToRemoveEdgeFrom, T edgeToRemove)
@@ -128,6 +133,11 @@ int main()
 	SG.addNode("Liam");
 	SG.addNode("Mary");
 	SG.addNode("James");
+
+	SG.addEdge("Tom", "Liam");
+	SG.addEdge("Tom", "Mary");
+	SG.addEdge("Mary", "Tom");
+	SG.addEdge("James", "Liam");
 
 	system("pause");
 }
