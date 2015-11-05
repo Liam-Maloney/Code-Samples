@@ -12,19 +12,17 @@ template <typename T> class Graph
 
 	struct Arc
 	{
-		T nodeArcPointsTo;
+		Node* nodeArcPointsTo;
 	};
 
-	//Represents a Node in the Graph
 	struct Node
 	{
 		T dataContainedAtNode;
-		std::list<Arc> arcs;	//A list of arcs from this node
+		std::list<Arc> arcs;	
 	};
 
 	//Will act as a list of pointers to the graph nodes.
 	std::list<Node> graphNodesList;
-	int IDGen = 0;	//will be incremented every time a new node is added
 
 	//---------------- END GRAPH STRUCTURES------------------------
 
@@ -37,12 +35,10 @@ public:
 		return graphNodesList.empty();
 	};
 
-	//Adds a new vertex to the graph
 	void addNode(T newNodeData)
 	{
 		Node newNode;
 		newNode.dataContainedAtNode = newNodeData;
-		newNode.id = IDGen++;
 		graphNodesList.push_back(newNode);
 	}
 
@@ -130,39 +126,8 @@ int main()
 
 	SG.addNode("Tom");
 	SG.addNode("Liam");
-	SG.addNode("Gary");
-	SG.addNode("Ciara");
 	SG.addNode("Mary");
-	SG.addEdge("Liam", "Tom");
-	SG.addEdge("Liam", "Mary");
-	SG.addEdge("Liam", "Gary");
-	SG.removeEdge("Liam", "Mary");
-	SG.removeNode("Gary");
-
-	std::string from;
-	std::string to;
-
-	from = "Liam";
-	to = "Tom";
-	if (SG.isConnectedTo(from, to))
-	{
-		std::cout << from << " and " << to << " are connected" << std::endl;
-	}
-	else
-	{
-		std::cout << from << " and " << to << " are NOT connected" << std::endl;
-	}
-
-	from = "Liam";
-	to = "Mary";
-	if (SG.isConnectedTo(from, to))
-	{
-		std::cout << from << " and " << to << " are connected" << std::endl;
-	}
-	else
-	{
-		std::cout << from << " and " << to << " are NOT connected" << std::endl;
-	}
+	SG.addNode("James");
 
 	system("pause");
 }
