@@ -23,7 +23,7 @@ template <typename T> class DiGraph
 	};
 
 	//Will act as a list of pointers to the graph nodes.
-	std::list<Node> graphNodesList;
+	std::list<Node*> graphNodesList;
 
 	//---------------- END GRAPH STRUCTURES------------------------
 
@@ -31,12 +31,12 @@ template <typename T> class DiGraph
 
 	Node* findNode(T findNodeWithThisData)
 	{
-		std::list<Node>::iterator findsNode = graphNodesList.begin();
-		while ((findsNode->dataContainedAtNode != findNodeWithThisData) & findsNode != graphNodesList.end())
+		std::list<Node*>::iterator findsNode = graphNodesList.begin();
+		while (((*findsNode)->dataContainedAtNode != findNodeWithThisData))
 		{
 			findsNode++;
 		}
-		return &(*findsNode);
+		return *findsNode;
 	}
 
 	Arc* findArc(Node* findArcFromHere, Node* findArcToHere)
@@ -58,8 +58,8 @@ public:
 
 	void addNode(T newNodeData)
 	{
-		Node newNode;
-		newNode.dataContainedAtNode = newNodeData;
+		Node* newNode = new Node;
+		newNode->dataContainedAtNode = newNodeData;
 		graphNodesList.push_back(newNode);
 	}
 
@@ -81,15 +81,11 @@ public:
 		delete arcToRemove;
 	}
 
-	void removeNode(T nodeToRemove)
+	void removeNode(T dataOfNodeToRemove)
 	{
-		std::list<Node>::iterator findsNodeToDelete = graphNodesList.begin();
-		//find the vertex to remove the edge from 
-		while ((findsNodeToDelete->dataContainedAtNode != nodeToRemove) & findsNodeToDelete != graphNodesList.end())
-		{
-			findsNodeToDelete++;
-		}
-		graphNodesList.erase(findsNodeToDelete);
+		Node* nodeToRemove = findNode(dataOfNodeToRemove);
+		graphNodesList.remove(nodeToRemove);
+		delete nodeToRemove;
 	}
 
 	bool isConnectedTo(T connectionFrom, T connectionTo)
@@ -133,6 +129,7 @@ int main()
 	SG.addNode("Liam");
 	SG.addNode("Mary");
 	SG.addNode("James");
+	SG.addNode("testRemoval");
 
 	SG.addArc("Tom", "Liam");
 	SG.addArc("Tom", "Mary");
@@ -140,6 +137,7 @@ int main()
 	SG.addArc("James", "Liam");
 
 	SG.removeArc("Tom", "Liam");
+	SG.removeNode("testRemoval");
 
 	system("pause");
 }
