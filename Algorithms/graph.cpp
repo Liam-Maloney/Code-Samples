@@ -11,9 +11,7 @@ template <typename T> class Graph
 	//Represents Arcs between vertexes
 	struct Arc
 	{
-		T goesTo;				//Identifier for element Arc goes to
-		int weight;				//weight of connection (Not used for now)
-		Arc* next;				//Pointer to next Arc from parents node
+		T goesTo;
 	};
 
 	//Represents a Node in the Graph
