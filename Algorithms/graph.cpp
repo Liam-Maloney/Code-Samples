@@ -8,7 +8,8 @@ template <typename T> class Graph
 {
 	//------------------- GRAPH STRUCTURES------------------------
 
-	//Represents Arcs between vertexes
+	struct Node;
+
 	struct Arc
 	{
 		T nodeArcPointsTo;
@@ -17,10 +18,8 @@ template <typename T> class Graph
 	//Represents a Node in the Graph
 	struct Node
 	{
-		T data;
+		T dataContainedAtNode;
 		std::list<Arc> arcs;	//A list of arcs from this node
-		int id;					//An identifier for this node (Not used for now, may be used
-								//in future to differenciate duplicate nodes)
 	};
 
 	//Will act as a list of pointers to the graph nodes.
@@ -42,7 +41,7 @@ public:
 	void addNode(T newNodeData)
 	{
 		Node newNode;
-		newNode.data = newNodeData;
+		newNode.dataContainedAtNode = newNodeData;
 		newNode.id = IDGen++;
 		graphNodesList.push_back(newNode);
 	}
@@ -53,7 +52,7 @@ public:
 		//stores reference to the item we want to find
 		std::list<Node>::iterator find = graphNodesList.begin();
 		//find the vertex to insert the edge to 
-		while ((find->data != nodeToAddEdge) & find != graphNodesList.end())
+		while ((find->dataContainedAtNode != nodeToAddEdge) & find != graphNodesList.end())
 		{
 			find++;
 		}
@@ -67,7 +66,7 @@ public:
 	{
 		std::list<Node>::iterator findsNode = graphNodesList.begin();
 		//find the vertex to remove the edge from 
-		while ((findsNode->data != nodeToRemoveEdgeFrom) & findsNode != graphNodesList.end())
+		while ((findsNode->dataContainedAtNode != nodeToRemoveEdgeFrom) & findsNode != graphNodesList.end())
 		{
 			findsNode++;
 		}
@@ -85,7 +84,7 @@ public:
 	{
 		std::list<Node>::iterator findsNodeToDelete = graphNodesList.begin();
 		//find the vertex to remove the edge from 
-		while ((findsNodeToDelete->data != nodeToRemove) & findsNodeToDelete != graphNodesList.end())
+		while ((findsNodeToDelete->dataContainedAtNode != nodeToRemove) & findsNodeToDelete != graphNodesList.end())
 		{
 			findsNodeToDelete++;
 		}
@@ -95,7 +94,7 @@ public:
 	bool isConnectedTo(T connectionFrom, T connectionTo)
 	{
 		std::list<Node>::iterator connectionFromNode = graphNodesList.begin();
-		while ((connectionFromNode->data != connectionFrom) & connectionFromNode != graphNodesList.end())
+		while ((connectionFromNode->dataContainedAtNode != connectionFrom) & connectionFromNode != graphNodesList.end())
 		{
 			connectionFromNode++;
 		}
