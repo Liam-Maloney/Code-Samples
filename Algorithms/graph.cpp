@@ -17,7 +17,7 @@ template <typename T> class DiGraph
 
 	struct Node
 	{
-		bool visited = true;
+		bool notVisitedYet = true;
 		T dataContainedAtNode;
 		std::list<Arc*> arcs;	//needs to be a list of pointers, 
 								//as I will be using the address to delete particular Arcs
@@ -35,7 +35,7 @@ template <typename T> class DiGraph
 		for (std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin(); 
 			traversesGraphNodes != graphNodesList.end(); traversesGraphNodes++)
 		{
-			(*traversesGraphNodes)->visited = false;
+			(*traversesGraphNodes)->notVisitedYet = true;
 		}
 	}
 
@@ -132,11 +132,39 @@ public:
 
 	void DFSRun(Node* currentNodeToTraverse)
 	{
+		//first, mark that we have now visited this node
+		currentNodeToTraverse->notVisitedYet = false;
+		std::cout << currentNodeToTraverse->dataContainedAtNode << std::endl;
 		//for loop using iterator on the node we start from, until we reach the end
 		//of the arcs which branch from it.
-			//mark this node as visited
+		std::list<Arc*>::iterator endOfArcs;
+		std::list<Arc*>::iterator traversesArcs;
+		if (currentNodeToTraverse->arcs.empty())
+		{
+			return;
+		}
+		else
+		{
+			endOfArcs = currentNodeToTraverse->arcs.end();
+			endOfArcs--;
+		}
+
+		traversesArcs = currentNodeToTraverse->arcs.begin();
+		for (; traversesArcs != endOfArcs; traversesArcs++)
+		{
+			
 			//if the node we point to has not been visited, then call DFS 
 			//recursively.
+			if ((*traversesArcs)->nodeArcPointsTo->notVisitedYet)
+			{
+				DFSRun((*traversesArcs)->nodeArcPointsTo);
+			}
+		}
+
+		if ((*traversesArcs)->nodeArcPointsTo->notVisitedYet)
+		{
+			DFSRun((*traversesArcs)->nodeArcPointsTo);
+		}
 		//return after, and mark this nodes color as finished processing
 	}
 
