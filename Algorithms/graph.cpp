@@ -17,6 +17,7 @@ template <typename T> class DiGraph
 
 	struct Node
 	{
+		bool visited = true;
 		T dataContainedAtNode;
 		std::list<Arc*> arcs;	//needs to be a list of pointers, 
 								//as I will be using the address to delete particular Arcs
@@ -27,6 +28,16 @@ template <typename T> class DiGraph
 	//---------------- END GRAPH STRUCTURES------------------------
 
 	//--------------------OPERATIONS-------------------------------
+
+	void resetNodesDFSStatus()
+	{
+		std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin();
+		for (std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin(); 
+			traversesGraphNodes != graphNodesList.end(); traversesGraphNodes++)
+		{
+			(*traversesGraphNodes)->visited = false;
+		}
+	}
 
 	Node* findNode(T findNodeWithThisData)
 	{
@@ -108,7 +119,26 @@ public:
 		return isConnected;
 	}
 
-	void depthFirstSearch();
+	void depthFirstSearch(T startDFSFromThisNode)
+	{
+		//first find the pointer to the node which has specified value
+		//call DFSRun which will do the actual DFS
+		//reset all of the colors to the unvisited value
+
+		Node* startPointerForDFSRun = findNode(startDFSFromThisNode);
+		DFSRun(startPointerForDFSRun);
+		resetNodesDFSStatus();
+	}
+
+	void DFSRun(Node* currentNodeToTraverse)
+	{
+		//for loop using iterator on the node we start from, until we reach the end
+		//of the arcs which branch from it.
+			//mark this node as visited
+			//if the node we point to has not been visited, then call DFS 
+			//recursively.
+		//return after, and mark this nodes color as finished processing
+	}
 
 	void breadthFirstSearch();
 
@@ -117,8 +147,27 @@ public:
 
 int main()
 {
-	DiGraph<std::string> SG;
+	DiGraph<int> intGraph;
 
+	for (int i = 0; i < 8; i++)
+	{
+		intGraph.addNode(i);
+	}
+
+
+	intGraph.addArc(0, 1);
+	intGraph.addArc(0, 3);
+	intGraph.addArc(1, 2);
+	intGraph.addArc(1, 6);
+	intGraph.addArc(2, 4);
+	intGraph.addArc(3, 7);
+	intGraph.addArc(5, 1);
+	intGraph.addArc(6, 2);
+	intGraph.addArc(6, 7);
+	intGraph.addArc(7, 5);
+	intGraph.addArc(7, 6);
+
+	/*
 	SG.addNode("Tom");
 	SG.addNode("Liam");
 	SG.addNode("Mary");
@@ -136,6 +185,11 @@ int main()
 	std::cout << SG.isEdgeBetween("James", "testRemoval") << std::endl;
 
 	SG.removeNode("testRemoval");
+	*/
+
+	intGraph.depthFirstSearch(0);
+
+	//expected output was:  0 1 2 4 6 7 5 3
 
 	system("pause");
 }
