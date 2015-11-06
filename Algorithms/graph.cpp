@@ -3,12 +3,20 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <queue>
 
 template <typename T> class DiGraph
 {
 	//------------------- GRAPH STRUCTURES------------------------
 
 	struct Node;
+
+	enum Color
+	{
+		FINISHED, 
+		PROCESSING, 
+		UNDISCOVERED
+	};
 
 	struct Arc
 	{
@@ -17,6 +25,7 @@ template <typename T> class DiGraph
 
 	struct Node
 	{
+		Color status = UNDISCOVERED;
 		bool notVisitedYet = true;
 		T dataContainedAtNode;
 		std::list<Arc*> arcs;	//needs to be a list of pointers, 
@@ -29,7 +38,17 @@ template <typename T> class DiGraph
 
 	//--------------------OPERATIONS-------------------------------
 
-	void resetNodesDFSStatus()
+	void resetNodesColor()
+	{
+		std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin();
+		for (std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin();
+			traversesGraphNodes != graphNodesList.end(); traversesGraphNodes++)
+		{
+			(*traversesGraphNodes)->status = UNDISCOVERED;
+		}
+	}
+
+	void resetNodesStatus()
 	{
 		std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin();
 		for (std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin(); 
@@ -127,7 +146,7 @@ public:
 
 		Node* startPointerForDFSRun = findNode(startDFSFromThisNode);
 		DFSRun(startPointerForDFSRun);
-		resetNodesDFSStatus();
+		resetNodesStatus();
 	}
 
 	void DFSRun(Node* currentNodeToTraverse)
@@ -168,13 +187,68 @@ public:
 		//return after, and mark this nodes color as finished processing
 	}
 
-	void breadthFirstSearch();
+	void breadthFirstSearch(T nodeToBeginSearchAt)
+	{
+		Node* nodePointerToStartBFSAt = findNode(nodeToBeginSearchAt);
+		nodePointerToStartBFSAt->status = PROCESSING;
+		BFSRun(nodePointerToStartBFSAt);
+		resetNodesStatus();
+	}
+
+	void BFSRun(Node* current)
+	{
+		//need a queue to store which nodes we have already marked
+		static std::queue<Node*> nextNodeToProcess;
+
+
+		std::cout << current->dataContainedAtNode << std::endl;
+		//visit each node from the current which are unvisited, 
+		//output, set as visited, and then add the visited node to the Queue
+
+		if (current->arcs.empty())
+		{
+			current->status = FINISHED;
+			return;
+		}
+		std::list<Arc*>::iterator begin = current->arcs.begin();
+		std::list<Arc*>::iterator end = current->arcs.end();
+		end--;
+
+		for (; begin != end; begin++)
+		{
+			if ((*begin)->nodeArcPointsTo->status == UNDISCOVERED)
+			{
+				(*begin)->nodeArcPointsTo->status = PROCESSING;
+				nextNodeToProcess.push((*begin)->nodeArcPointsTo);
+			}
+		}
+
+		if ((*begin)->nodeArcPointsTo->status == UNDISCOVERED)
+		{
+			(*begin)->nodeArcPointsTo->status = PROCESSING;
+			nextNodeToProcess.push((*begin)->nodeArcPointsTo);
+		}
+
+		current->status = FINISHED;
+
+		if (!(nextNodeToProcess.empty()))
+		{
+			Node* nextToTraverse = nextNodeToProcess.front();
+			nextNodeToProcess.pop();
+			BFSRun(nextToTraverse);
+		}
+	
+	}
 
 	//------------------END OPERATIONS-----------------------------
 };
 
 int main()
 {
+
+	//number Graph
+
+	
 	DiGraph<int> intGraph;
 
 	for (int i = 0; i < 8; i++)
@@ -194,8 +268,13 @@ int main()
 	intGraph.addArc(6, 7);
 	intGraph.addArc(7, 5);
 	intGraph.addArc(7, 6);
-
+	
+	intGraph.breadthFirstSearch(0);
 	/*
+	//name graph
+
+	DiGraph<std::string> SG;
+
 	SG.addNode("Tom");
 	SG.addNode("Liam");
 	SG.addNode("Mary");
@@ -209,13 +288,10 @@ int main()
 	SG.addArc("James", "Liam");
 	SG.addArc("James", "Tom");
 
-	std::cout << SG.isEdgeBetween("James", "Liam") << std::endl;
-	std::cout << SG.isEdgeBetween("James", "testRemoval") << std::endl;
 
-	SG.removeNode("testRemoval");
+	SG.depthFirstSearch("James");
 	*/
 
-	intGraph.depthFirstSearch(0);
 
 	//expected output was:  0 1 2 4 6 7 5 3
 
