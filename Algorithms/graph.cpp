@@ -145,20 +145,20 @@ public:
 		resetNodesStatus();
 	}
 
-	void DFSRun(Node* currentNodeToTraverse)
+	void DFSRun(Node* current)
 	{
-		currentNodeToTraverse->notVisitedYet = false;
-		std::cout << currentNodeToTraverse->dataContainedAtNode << std::endl;
+		current->notVisitedYet = false;
+		std::cout << current->dataContainedAtNode << std::endl;
 
-		if (currentNodeToTraverse->arcs.empty())
+		if (current->arcs.empty())
 		{
 			//if the Arcs are empty at this node, we do not need to do anything.
 			return;
 		}
 		else
 		{
-			for (std::list<Arc*>::iterator traversesArcs = currentNodeToTraverse->arcs.begin(); 
-					traversesArcs != currentNodeToTraverse->arcs.end(); traversesArcs++)
+			for (std::list<Arc*>::iterator traversesArcs = current->arcs.begin();
+				traversesArcs != current->arcs.end(); traversesArcs++)
 			{
 				if ((*traversesArcs)->nodeArcPointsTo->notVisitedYet)
 				{
@@ -179,47 +179,39 @@ public:
 
 	void BFSRun(Node* current)
 	{
-		//need a queue to store which nodes we have already marked
 		static std::queue<Node*> nextNodeToProcess;
-
-
 		std::cout << current->dataContainedAtNode << std::endl;
-		//visit each node from the current which are unvisited, 
-		//output, set as visited, and then add the visited node to the Queue
 
 		if (current->arcs.empty())
 		{
 			current->status = FINISHED;
 			return;
 		}
-		std::list<Arc*>::iterator begin = current->arcs.begin();
-		std::list<Arc*>::iterator end = current->arcs.end();
-		end--;
-
-		for (; begin != end; begin++)
+		else
 		{
-			if ((*begin)->nodeArcPointsTo->status == UNDISCOVERED)
+			for (std::list<Arc*>::iterator traversesArcs = current->arcs.begin(); 
+				traversesArcs != current->arcs.end(); traversesArcs++)
 			{
-				(*begin)->nodeArcPointsTo->status = PROCESSING;
-				nextNodeToProcess.push((*begin)->nodeArcPointsTo);
+				if ((*traversesArcs)->nodeArcPointsTo->status == UNDISCOVERED)
+				{
+					(*traversesArcs)->nodeArcPointsTo->status = PROCESSING;
+					nextNodeToProcess.push((*traversesArcs)->nodeArcPointsTo);
+				}
+			}
+
+			current->status = FINISHED;
+
+			if (nextNodeToProcess.empty())
+			{
+				return;
+			}
+			else
+			{
+				Node* nextToTraverse = nextNodeToProcess.front();
+				nextNodeToProcess.pop();
+				BFSRun(nextToTraverse);
 			}
 		}
-
-		if ((*begin)->nodeArcPointsTo->status == UNDISCOVERED)
-		{
-			(*begin)->nodeArcPointsTo->status = PROCESSING;
-			nextNodeToProcess.push((*begin)->nodeArcPointsTo);
-		}
-
-		current->status = FINISHED;
-
-		if (!(nextNodeToProcess.empty()))
-		{
-			Node* nextToTraverse = nextNodeToProcess.front();
-			nextNodeToProcess.pop();
-			BFSRun(nextToTraverse);
-		}
-	
 	}
 
 	//------------------END OPERATIONS-----------------------------
@@ -252,7 +244,7 @@ int main()
 	intGraph.addArc(7, 6);
 	
 
-	intGraph.depthFirstSearch(0);
+	intGraph.breadthFirstSearch(0);
 	/*
 	//name graph
 
