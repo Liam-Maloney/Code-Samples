@@ -218,18 +218,13 @@ public:
 };
 
 int main()
-{
-
-	//number Graph
-
-	
+{	
 	DiGraph<int> intGraph;
 
 	for (int i = 0; i < 8; i++)
 	{
 		intGraph.addNode(i);
 	}
-
 
 	intGraph.addArc(0, 1);
 	intGraph.addArc(0, 3);
@@ -243,32 +238,7 @@ int main()
 	intGraph.addArc(7, 5);
 	intGraph.addArc(7, 6);
 	
-
 	intGraph.breadthFirstSearch(0);
-	/*
-	//name graph
-
-	DiGraph<std::string> SG;
-
-	SG.addNode("Tom");
-	SG.addNode("Liam");
-	SG.addNode("Mary");
-	SG.addNode("James");
-	SG.addNode("testRemoval");
-
-	SG.addArc("Tom", "Liam");
-	SG.addArc("Tom", "Mary");
-	SG.addArc("Mary", "Tom");
-	SG.addArc("James", "Mary");
-	SG.addArc("James", "Liam");
-	SG.addArc("James", "Tom");
-
-
-	SG.depthFirstSearch("James");
-	*/
-
-
-	//expected output was:  0 1 2 4 6 7 5 3
 
 	system("pause");
 }
