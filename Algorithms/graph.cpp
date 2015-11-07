@@ -28,16 +28,76 @@ template <typename T> class DiGraph
 		Color status = UNDISCOVERED;
 		bool notVisitedYet = true;
 		T dataContainedAtNode;
-		std::list<Arc*> arcs;	//needs to be a list of pointers, 
+		std::list<Arc*> arcs;	//needs to be a list of pointers to Arcs, 
 								//as I will be using the address to delete particular Arcs
 	};
 
 	std::list<Node*> graphNodesList;
 
 	//---------------- END GRAPH STRUCTURES------------------------
+	//--------------------- TRAVERSALS ----------------------------
 
-	//--------------------OPERATIONS-------------------------------
+	void BFSRun(Node* current)
+	{
+		static std::queue<Node*> nextNodeToProcess;
+		std::cout << current->dataContainedAtNode << std::endl;
 
+		if (current->arcs.empty())
+		{
+			current->status = FINISHED;
+			return;
+		}
+		else
+		{
+			for (std::list<Arc*>::iterator traversesArcs = current->arcs.begin();
+				traversesArcs != current->arcs.end(); traversesArcs++)
+			{
+				if ((*traversesArcs)->nodeArcPointsTo->status == UNDISCOVERED)
+				{
+					(*traversesArcs)->nodeArcPointsTo->status = PROCESSING;
+					nextNodeToProcess.push((*traversesArcs)->nodeArcPointsTo);
+				}
+			}
+
+			current->status = FINISHED;
+
+			if (nextNodeToProcess.empty())
+			{
+				return;
+			}
+			else
+			{
+				Node* nextToTraverse = nextNodeToProcess.front();
+				nextNodeToProcess.pop();
+				BFSRun(nextToTraverse);
+			}
+		}
+	}
+
+	void DFSRun(Node* current)
+	{
+		current->notVisitedYet = false;
+		std::cout << current->dataContainedAtNode << std::endl;
+
+		if (current->arcs.empty())
+		{
+			//if the Arcs are empty at this node, we do not need to do anything.
+			return;
+		}
+		else
+		{
+			for (std::list<Arc*>::iterator traversesArcs = current->arcs.begin();
+				traversesArcs != current->arcs.end(); traversesArcs++)
+			{
+				if ((*traversesArcs)->nodeArcPointsTo->notVisitedYet)
+				{
+					DFSRun((*traversesArcs)->nodeArcPointsTo);
+				}
+			}
+			return;
+		}
+	}
+	
 	void resetNodesColor()
 	{
 		std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin();
@@ -51,12 +111,15 @@ template <typename T> class DiGraph
 	void resetNodesStatus()
 	{
 		std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin();
-		for (std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin(); 
+		for (std::list<Node*>::iterator traversesGraphNodes = graphNodesList.begin();
 			traversesGraphNodes != graphNodesList.end(); traversesGraphNodes++)
 		{
 			(*traversesGraphNodes)->notVisitedYet = true;
 		}
 	}
+
+	//----------------- END TRAVERSALS ----------------------------
+	//--------------------OPERATIONS-------------------------------
 
 	Node* findNode(T findNodeWithThisData)
 	{
@@ -83,7 +146,7 @@ public:
 	bool isEmpty()
 	{
 		return graphNodesList.empty();
-	};
+	}
 
 	void addNode(T newNodeData)
 	{
@@ -145,73 +208,12 @@ public:
 		resetNodesStatus();
 	}
 
-	void DFSRun(Node* current)
-	{
-		current->notVisitedYet = false;
-		std::cout << current->dataContainedAtNode << std::endl;
-
-		if (current->arcs.empty())
-		{
-			//if the Arcs are empty at this node, we do not need to do anything.
-			return;
-		}
-		else
-		{
-			for (std::list<Arc*>::iterator traversesArcs = current->arcs.begin();
-				traversesArcs != current->arcs.end(); traversesArcs++)
-			{
-				if ((*traversesArcs)->nodeArcPointsTo->notVisitedYet)
-				{
-					DFSRun((*traversesArcs)->nodeArcPointsTo);
-				}
-			}
-			return;
-		}
-	}
-
 	void breadthFirstSearch(T nodeToBeginSearchAt)
 	{
 		Node* nodePointerToStartBFSAt = findNode(nodeToBeginSearchAt);
 		nodePointerToStartBFSAt->status = PROCESSING;
 		BFSRun(nodePointerToStartBFSAt);
 		resetNodesStatus();
-	}
-
-	void BFSRun(Node* current)
-	{
-		static std::queue<Node*> nextNodeToProcess;
-		std::cout << current->dataContainedAtNode << std::endl;
-
-		if (current->arcs.empty())
-		{
-			current->status = FINISHED;
-			return;
-		}
-		else
-		{
-			for (std::list<Arc*>::iterator traversesArcs = current->arcs.begin(); 
-				traversesArcs != current->arcs.end(); traversesArcs++)
-			{
-				if ((*traversesArcs)->nodeArcPointsTo->status == UNDISCOVERED)
-				{
-					(*traversesArcs)->nodeArcPointsTo->status = PROCESSING;
-					nextNodeToProcess.push((*traversesArcs)->nodeArcPointsTo);
-				}
-			}
-
-			current->status = FINISHED;
-
-			if (nextNodeToProcess.empty())
-			{
-				return;
-			}
-			else
-			{
-				Node* nextToTraverse = nextNodeToProcess.front();
-				nextNodeToProcess.pop();
-				BFSRun(nextToTraverse);
-			}
-		}
 	}
 
 	//------------------END OPERATIONS-----------------------------
