@@ -140,10 +140,6 @@ public:
 
 	void depthFirstSearch(T startDFSFromThisNode)
 	{
-		//first find the pointer to the node which has specified value
-		//call DFSRun which will do the actual DFS
-		//reset all of the colors to the unvisited value
-
 		Node* startPointerForDFSRun = findNode(startDFSFromThisNode);
 		DFSRun(startPointerForDFSRun);
 		resetNodesStatus();
@@ -151,40 +147,26 @@ public:
 
 	void DFSRun(Node* currentNodeToTraverse)
 	{
-		//first, mark that we have now visited this node
 		currentNodeToTraverse->notVisitedYet = false;
 		std::cout << currentNodeToTraverse->dataContainedAtNode << std::endl;
-		//for loop using iterator on the node we start from, until we reach the end
-		//of the arcs which branch from it.
-		std::list<Arc*>::iterator endOfArcs;
-		std::list<Arc*>::iterator traversesArcs;
+
 		if (currentNodeToTraverse->arcs.empty())
 		{
+			//if the Arcs are empty at this node, we do not need to do anything.
 			return;
 		}
 		else
 		{
-			endOfArcs = currentNodeToTraverse->arcs.end();
-			endOfArcs--;
-		}
-
-		traversesArcs = currentNodeToTraverse->arcs.begin();
-		for (; traversesArcs != endOfArcs; traversesArcs++)
-		{
-			
-			//if the node we point to has not been visited, then call DFS 
-			//recursively.
-			if ((*traversesArcs)->nodeArcPointsTo->notVisitedYet)
+			for (std::list<Arc*>::iterator traversesArcs = currentNodeToTraverse->arcs.begin(); 
+					traversesArcs != currentNodeToTraverse->arcs.end(); traversesArcs++)
 			{
-				DFSRun((*traversesArcs)->nodeArcPointsTo);
+				if ((*traversesArcs)->nodeArcPointsTo->notVisitedYet)
+				{
+					DFSRun((*traversesArcs)->nodeArcPointsTo);
+				}
 			}
+			return;
 		}
-
-		if ((*traversesArcs)->nodeArcPointsTo->notVisitedYet)
-		{
-			DFSRun((*traversesArcs)->nodeArcPointsTo);
-		}
-		//return after, and mark this nodes color as finished processing
 	}
 
 	void breadthFirstSearch(T nodeToBeginSearchAt)
@@ -269,7 +251,8 @@ int main()
 	intGraph.addArc(7, 5);
 	intGraph.addArc(7, 6);
 	
-	intGraph.breadthFirstSearch(0);
+
+	intGraph.depthFirstSearch(0);
 	/*
 	//name graph
 
