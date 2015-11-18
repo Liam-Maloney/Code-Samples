@@ -40,6 +40,7 @@ template <typename T> class WeightedDiGraph
 	};
 
 	std::list<Node*> graphNodesList;
+	int countOfNodes = 0;
 
 	//---------------- END GRAPH STRUCTURES------------------------
 	//--------------------- TRAVERSALS ----------------------------
@@ -160,6 +161,7 @@ public:
 		Node* newNode = new Node;
 		newNode->dataContainedAtNode = newNodeData;
 		graphNodesList.push_back(newNode);
+		countOfNodes++;
 	}
 
 	void addArc(T nodeToAddArc, T newArcLinkTo, int newArcWeight)
@@ -186,6 +188,7 @@ public:
 		Node* nodeToRemove = findNode(dataOfNodeToRemove);
 		graphNodesList.remove(nodeToRemove);
 		delete nodeToRemove;
+		countOfNodes--;
 	}
 
 	bool isEdgeBetween(T connectionFrom, T connectionTo)
@@ -225,6 +228,23 @@ public:
 	}
 
 	//------------------END OPERATIONS-----------------------------
+
+	//--------------- MINIMUM SPANNING TREES ----------------------
+
+	WeightedDiGraph primsAlgorithm(T nodeToStartAt)
+	{
+		//a. Initialise a new graph, which we will be returning as the Minimum spanning tree
+		//1. add the starting node to the graph as the only node.
+		//2. now while there are still outstanding nodes in the original graph, pick from the 
+		//		list of visited nodes (IE, ones already in the graph), 
+		//		the smallest weighted edge to an unvisited node 
+		//		(IE, one which is not in the visited list).
+		//		Add this node to the visited List, and add this node with its edge to the MST
+		//		Graph.
+		//3. return the MST Graph.
+	}
+
+	//--------- - END MINIMUM SPANNING TREES ----------------------
 };
 
 int main()
