@@ -1,4 +1,4 @@
--module(list_count).
+-module(recursion_practice).
 -export([count_list/1, factorial/1, reverses_list/1]).
 
 -author("Liam Maloney").
@@ -40,7 +40,6 @@ reverses_list(Reversing_List, [Orig_Head | Orig_Tail]) ->
 reverses_list(Reversed_List, []) ->
     Reversed_List.
 
-
 %%interface function
 zip(Zip, Zap) ->
     zip(Zip, Zap, []).
@@ -49,3 +48,14 @@ zip([X | TlX ], [Y | TlY ], Tuple_Builder) ->
     zip(TlX, TlY, [{X, Y} | Tuple_Builder]);
 zip([], [], Zipped) ->
     Zipped.
+
+quicksort([]) -> [];
+quicksort([Pivot|Rest]) ->
+{Smaller, Larger} = partition(Pivot,Rest,[],[]),
+quicksort(Smaller) ++ [Pivot] ++ quicksort(Larger).
+
+partition(_,[], Smaller, Larger) -> {Smaller, Larger};
+partition(Pivot, [H|T], Smaller, Larger) ->
+if H =< Pivot -> partition(Pivot, T, [H|Smaller], Larger);
+H >  Pivot -> partition(Pivot, T, Smaller, [H|Larger])
+end.
