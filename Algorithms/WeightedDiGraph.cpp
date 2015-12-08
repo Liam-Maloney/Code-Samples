@@ -233,7 +233,7 @@ public:
 
 	//--------------- MINIMUM SPANNING TREES ----------------------
 
-	bool unvisitedNodeExistsFromVistedElements(std::list<Node*> visitedNodes)
+	bool unvisitedNodeExistsInVistedElements(std::list<Node*> visitedNodes)
 	{
 		for (std::list<Node*>::iterator findsNode = visitedNodes.begin(); findsNode != visitedNodes.end(); findsNode++)
 		{
@@ -259,7 +259,7 @@ public:
 		startNode->notVisitedYet = false;
 		visitedNodes.push_front(startNode);
 
-		while (unvisitedNodeExistsFromVistedElements(visitedNodes))
+		while (unvisitedNodeExistsInVistedElements(visitedNodes))
 		{
 			Node* smallestEdgeToUnvisitedNode = findNodeWithSmallestEdge(visitedNodes);
 			MST.addNode(findNodeSmallestEdgeGoesTo(smallestEdgeToUnvisitedNode)->dataContainedAtNode);
