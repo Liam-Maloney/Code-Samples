@@ -28,6 +28,7 @@ template <typename T> class WeightedDiGraph
 	{
 		int weight = 0;
 		Node* nodeArcPointsTo;
+		Node* nodeArcPointsFrom;
 	};
 
 	struct Node
@@ -169,6 +170,7 @@ public:
 		Node* sourceOfArc = findNode(nodeToAddArc);
 		Node* destinationOfArc = findNode(newArcLinkTo);
 		Arc* newArc = new Arc;
+		newArc->nodeArcPointsFrom = sourceOfArc;
 		newArc->weight = newArcWeight;
 		newArc->nodeArcPointsTo = destinationOfArc;
 		sourceOfArc->arcs.push_back(newArc);
@@ -231,9 +233,9 @@ public:
 
 	//--------------- MINIMUM SPANNING TREES ----------------------
 
-	bool seeIfUnvisitedNodeExists(std::list<Node*> alreadyVisitedElements)
+	bool unvisitedNodeExistsFromVistedElements(std::list<Node*> visitedNodes)
 	{
-		for (std::list<Node*>::iterator findsNode = alreadyVisitedElements.begin(); findsNode != alreadyVisitedElements.end(); findsNode++)
+		for (std::list<Node*>::iterator findsNode = visitedNodes.begin(); findsNode != visitedNodes.end(); findsNode++)
 		{
 			std::list<Arc*>::iterator findsArc = (*findsNode)->arcs.begin();
 			for (; findsArc != (*findsNode)->arcs.end(); findsArc++)
@@ -250,35 +252,37 @@ public:
 	WeightedDiGraph primsAlgorithm(T nodeToStartAt)
 	{
 		WeightedDiGraph<T> MST;
-		std::list<Node*> alreadyVisitedElements;
+		std::list<Node*> visitedNodes;
 		Node* startNode = findNode(nodeToStartAt);
+
 		MST.addNode(startNode->dataContainedAtNode);
 		startNode->notVisitedYet = false;
-		alreadyVisitedElements.push_front(startNode);
-		while (seeIfUnvisitedNodeExists(alreadyVisitedElements)) //this condition does not work, as when the graph is unconnected, it crashes
-		{
-			Node* containsSmallestEdge = findNodeWithSmallestEdge(alreadyVisitedElements);
-			MST.addNode(findNodeSmallestEdgeGoesTo(containsSmallestEdge)->dataContainedAtNode);
-			containsSmallestEdge->notVisitedYet = false;
+		visitedNodes.push_front(startNode);
 
-			T makeEdgeFrom = containsSmallestEdge->dataContainedAtNode;
-			T makeEdgeTo = findNodeSmallestEdgeGoesTo(containsSmallestEdge)->dataContainedAtNode;
-			int weightOfEdge = findWeightOfSmallestEdge(containsSmallestEdge);
+		while (unvisitedNodeExistsFromVistedElements(visitedNodes))
+		{
+			Node* smallestEdgeToUnvisitedNode = findNodeWithSmallestEdge(visitedNodes);
+			MST.addNode(findNodeSmallestEdgeGoesTo(smallestEdgeToUnvisitedNode)->dataContainedAtNode);
+			smallestEdgeToUnvisitedNode->notVisitedYet = false;
+
+			T makeEdgeFrom = smallestEdgeToUnvisitedNode->dataContainedAtNode;
+			T makeEdgeTo = findNodeSmallestEdgeGoesTo(smallestEdgeToUnvisitedNode)->dataContainedAtNode;
+			int weightOfEdge = findWeightOfSmallestEdge(smallestEdgeToUnvisitedNode);
 
 			MST.addArc(makeEdgeFrom, makeEdgeTo, weightOfEdge);
-			alreadyVisitedElements.push_front(findNodeSmallestEdgeGoesTo(containsSmallestEdge));
-			(*alreadyVisitedElements.begin())->notVisitedYet = false;
+			visitedNodes.push_front(findNodeSmallestEdgeGoesTo(smallestEdgeToUnvisitedNode));
+			(*visitedNodes.begin())->notVisitedYet = false;
 		}
 		return MST;
 	}
 	
-	Node* findNodeWithSmallestEdge(std::list<Node*> alreadyVisitedElements) //working
+	Node* findNodeWithSmallestEdge(std::list<Node*> visitedNodes) //working
 	{
 		Node* smallestEdgedNode = NULL;
 		int smallestEdge = 1000000;
 		
 	
-		for (std::list<Node*>::iterator findsNode = alreadyVisitedElements.begin(); findsNode != alreadyVisitedElements.end(); findsNode++)
+		for (std::list<Node*>::iterator findsNode = visitedNodes.begin(); findsNode != visitedNodes.end(); findsNode++)
 		{
 			std::list<Arc*>::iterator findsArc = (*findsNode)->arcs.begin();
 			for (; findsArc != (*findsNode)->arcs.end(); findsArc++)
@@ -293,18 +297,18 @@ public:
 		return smallestEdgedNode;
 	}
 
-	Node* findNodeSmallestEdgeGoesTo(Node* containsSmallestEdge) //working
+	Node* findNodeSmallestEdgeGoesTo(Node* smallestEdgeToUnvisitedNode) //working
 	{
-		std::list<Arc*>::iterator findsSmallestArc = containsSmallestEdge->arcs.begin();
+		std::list<Arc*>::iterator findsSmallestArc = smallestEdgeToUnvisitedNode->arcs.begin();
 
-		while (((*findsSmallestArc)->nodeArcPointsTo->notVisitedYet == false) && (findsSmallestArc != containsSmallestEdge->arcs.end())){
+		while (((*findsSmallestArc)->nodeArcPointsTo->notVisitedYet == false) && (findsSmallestArc != smallestEdgeToUnvisitedNode->arcs.end())){
 			findsSmallestArc++;
 		}
 
 		Arc* smallestArc = *findsSmallestArc;
 
-		//int smallestWeight = (*containsSmallestEdge->arcs.begin())->weight;
-		for (; findsSmallestArc != containsSmallestEdge->arcs.end(); findsSmallestArc++)
+		//int smallestWeight = (*smallestEdgeToUnvisitedNode->arcs.begin())->weight;
+		for (; findsSmallestArc != smallestEdgeToUnvisitedNode->arcs.end(); findsSmallestArc++)
 		{
 			if (((*findsSmallestArc)->weight < smallestArc->weight) && ((*findsSmallestArc)->nodeArcPointsTo->notVisitedYet))
 			{
@@ -314,18 +318,18 @@ public:
 		return smallestArc->nodeArcPointsTo;
 	}
 
-	int findWeightOfSmallestEdge(Node* containsSmallestEdge)
+	int findWeightOfSmallestEdge(Node* smallestEdgeToUnvisitedNode)
 	{
-		std::list<Arc*>::iterator findsSmallestArc = containsSmallestEdge->arcs.begin();
+		std::list<Arc*>::iterator findsSmallestArc = smallestEdgeToUnvisitedNode->arcs.begin();
 
-		while (((*findsSmallestArc)->nodeArcPointsTo->notVisitedYet == false) && (findsSmallestArc != containsSmallestEdge->arcs.end())){
+		while (((*findsSmallestArc)->nodeArcPointsTo->notVisitedYet == false) && (findsSmallestArc != smallestEdgeToUnvisitedNode->arcs.end())){
 			findsSmallestArc++;
 		}
 
 		Arc* smallestArc = *findsSmallestArc;
 
-		int smallestWeight = (*containsSmallestEdge->arcs.begin())->weight;
-		for (; findsSmallestArc != containsSmallestEdge->arcs.end(); findsSmallestArc++)
+		int smallestWeight = (*smallestEdgeToUnvisitedNode->arcs.begin())->weight;
+		for (; findsSmallestArc != smallestEdgeToUnvisitedNode->arcs.end(); findsSmallestArc++)
 		{
 			if (((*findsSmallestArc)->weight < smallestArc->weight) && ((*findsSmallestArc)->nodeArcPointsTo->notVisitedYet))
 			{
