@@ -185,9 +185,19 @@ class AVL : public BST {
 			root = rotateAt->parent;
 			rotateAt->parent->parent = root;
 		} else {
+			bool rotationInParentsRightSubtree;
+
 			if (oldRoot->RChild == rotateAt){
+				rotationInParentsRightSubtree = true;
+			}
+			else {
+				rotationInParentsRightSubtree = false;
+			}
+
+			if (rotationInParentsRightSubtree){
 				oldRoot->RChild = rotateAt->parent;
-			} else {
+			}
+			else {
 				oldRoot->LChild = rotateAt->parent;
 			}
 		}
@@ -210,7 +220,16 @@ class AVL : public BST {
 			rotateAt->parent->parent = root;
 		}
 		else {
+			bool rotationInParentsRightSubtree;
+
 			if (oldRoot->RChild == rotateAt){
+				rotationInParentsRightSubtree = true;
+			}
+			else {
+				rotationInParentsRightSubtree = false;
+			}
+
+			if (rotationInParentsRightSubtree){
 				oldRoot->RChild = rotateAt->parent;
 			}
 			else {
@@ -412,3 +431,17 @@ public:
 		return total;
 	}
 };
+
+int main()
+{
+	int arr[25] = {5, 3, 1, 6, 7, 8, 99, 11, 22, 33, 44, 55, 66, 77, 88, 34, 23, 12, 56, 78, 90, 676, 2323, 123321, 285};
+	AVL tree(2);
+	
+		tree.insert(1);
+		tree.insert(4);
+		tree.insert(3);
+		tree.insert(5);
+		
+
+	system("pause");
+}
