@@ -339,21 +339,22 @@ public:
 
 	//--------------OVERRIDES FROM BINARY TREE-----------------//
 
-	Node* hit = NULL;
-	Node* search(Node* current, int searchFor){
-		if (current != NULL){
-			if (current->data == searchFor) {
-				hit = current;
-			} else {
-				if (current->LChild != NULL) {
-					search(current->LChild, searchFor);
-				}
-				if (current->RChild != NULL) {
-					search(current->RChild, searchFor);
-				}
+	Node* searchUtility(Node* current, int searchFor){
+	
+		if (current != NULL)
+		{
+			if (current->data < searchFor){
+				current = searchUtility(current->RChild, searchFor);
+			}
+			else if (current->data > searchFor){
+				current = searchUtility(current->LChild, searchFor);
 			}
 		}
-		return hit;
+		return current;
+	}
+
+	Node* search(int searchFor){
+		return searchUtility(this->root, searchFor);
 	}
 
 	//-----------------TRAVERSALS-----------------------
@@ -404,7 +405,7 @@ public:
 
 	void addLeft(int node, int value){
 		//search for the position to insert the new node under
-		Node* parent = search(root, node);
+		Node* parent = search(node);
 		Node* newNode = new Node;
 		newNode->data = value;
 		parent->LChild = newNode;
@@ -412,7 +413,7 @@ public:
 
 	void addRight(int node, int value){
 		//search for the position to insert the new node under
-		Node* parent = search(root, node);
+		Node* parent = search(node);
 		Node* newNode = new Node;
 		newNode->data = value;
 		parent->RChild = newNode;
@@ -434,14 +435,13 @@ public:
 
 int main()
 {
-	int arr[25] = {5, 3, 1, 6, 7, 8, 99, 11, 22, 33, 44, 55, 66, 77, 88, 34, 23, 12, 56, 78, 90, 676, 2323, 123321, 285};
-	AVL tree(2);
-	
-		tree.insert(1);
-		tree.insert(4);
-		tree.insert(3);
-		tree.insert(5);
+	AVL tree(100);
+	tree.insert(22);
+	tree.insert(1);
+	tree.insert(3);
+	tree.insert(444);
+	tree.insert(45);
 		
-
+	std::cout << tree.search(45)->data << std::endl;
 	system("pause");
 }
